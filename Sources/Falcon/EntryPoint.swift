@@ -7,7 +7,8 @@
 
 public enum EntryPoint {
     public static func create(with applicationType: Application.Type) {
-        print(Falcon.welcomeMessage)
+        Log.coreInfo("\(Falcon.welcomeMessage)")
+        
         let application = applicationType.init()
         application.run()
     }
