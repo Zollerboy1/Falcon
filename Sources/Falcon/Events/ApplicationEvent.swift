@@ -41,6 +41,10 @@ public class WindowCloseEvent: ApplicationEvent {
     }
     
     internal init() {}
+    
+    public var description: String {
+        return "WindowCloseEvent"
+    }
 }
 
 
@@ -52,6 +56,10 @@ public class AppTickEvent: ApplicationEvent {
     }
     
     internal init() {}
+    
+    public var description: String {
+        return "AppTickEvent"
+    }
 }
 
 public class AppUpdateEvent: ApplicationEvent {
@@ -62,6 +70,10 @@ public class AppUpdateEvent: ApplicationEvent {
     }
     
     internal init() {}
+    
+    public var description: String {
+        return "AppUpdateEvent"
+    }
 }
 
 public class AppRenderEvent: ApplicationEvent {
@@ -72,4 +84,8 @@ public class AppRenderEvent: ApplicationEvent {
     }
     
     internal init() {}
+    
+    public var description: String {
+        return "AppRenderEvent"
+    }
 }

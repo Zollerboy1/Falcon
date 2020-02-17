@@ -32,8 +32,6 @@ public extension Event {
     func belongsTo(category: EventCategory) -> Bool {
         return Self.category.contains(category)
     }
-    
-    var description: String { return String(describing: self) }
 }
 
 
