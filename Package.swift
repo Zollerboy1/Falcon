@@ -26,8 +26,11 @@ let package = Package(
             pkgConfig: "glfw3",
             providers: [.brew(["glfw3"])]),
         .target(
+            name: "glad",
+            dependencies: []),
+        .target(
             name: "Falcon",
-            dependencies: ["HeliumLogger", "SGLOpenGL", "SGLMath", "GLFW"]),
+            dependencies: ["HeliumLogger", "SGLOpenGL", "SGLMath", "GLFW", "glad"]),
         .testTarget(
             name: "FalconTests",
             dependencies: ["Falcon"]),

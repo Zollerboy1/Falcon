@@ -1,0 +1,5 @@
+module glad
+{
+    umbrella header "glad/glad.h"
+    link "glad"
+}

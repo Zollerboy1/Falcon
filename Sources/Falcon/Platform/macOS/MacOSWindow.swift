@@ -8,6 +8,7 @@
 #if os(macOS)
 
 import GLFW
+import func glad.gladLoadGLLoader
 
 fileprivate var isGLFWInitialized = false
 
@@ -43,6 +44,12 @@ class MacOSWindow: Window {
         
         self.glfwWindow = glfwCreateWindow(Int32(props.width), Int32(props.height), props.title, nil, nil)
         glfwMakeContextCurrent(glfwWindow)
+        
+        let status = gladLoadGLLoader { procname in
+            unsafeBitCast(glfwGetProcAddress(procname), to: UnsafeMutableRawPointer.self)
+        }
+        Log.coreAssert(status == 1, "Could not initialize Glad!")
+        
         glfwSetWindowUserPointer(glfwWindow, &windowData)
         glfwSwapInterval(1)
         
