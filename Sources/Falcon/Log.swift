@@ -272,49 +272,6 @@ public class Log {
     }
     
     
-    /// Log a message passing with the `Logger.Level.error` log level using the client logger.
-    ///
-    /// If `.error` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
-    /// otherwise nothing will happen.
-    ///
-    /// - parameters:
-    ///    - message: The message to be logged. `message` can be used with any string interpolation literal.
-    ///    - metadata: One-off metadata to attach to this log message
-    ///    - file: The file this log message originates from (there's usually no need to pass it explicitly as it
-    ///            defaults to `#file`).
-    ///    - function: The function this log message originates from (there's usually no need to pass it explicitly as
-    ///            it defaults to `#function`).
-    ///    - line: The line this log message originates from (there's usually no need to pass it explicitly as it
-    ///            defaults to `#line`).
-    @inlinable
-    public static func error(_ message: @autoclosure () -> Logger.Message,
-                      metadata: @autoclosure () -> Logger.Metadata? = nil,
-                      file: String = #file, function: String = #function, line: UInt = #line) {
-        instance.client.error(message(), metadata: metadata(), file: file, function: function, line: line)
-    }
-    
-    /// Log a message passing with the `Logger.Level.critical` log level using the core logger.
-    ///
-    /// If `.critical` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
-    /// otherwise nothing will happen.
-    ///
-    /// - parameters:
-    ///    - message: The message to be logged. `message` can be used with any string interpolation literal.
-    ///    - metadata: One-off metadata to attach to this log message
-    ///    - file: The file this log message originates from (there's usually no need to pass it explicitly as it
-    ///            defaults to `#file`).
-    ///    - function: The function this log message originates from (there's usually no need to pass it explicitly as
-    ///            it defaults to `#function`).
-    ///    - line: The line this log message originates from (there's usually no need to pass it explicitly as it
-    ///            defaults to `#line`).
-    @inlinable
-    internal static func coreCritical(_ message: @autoclosure () -> Logger.Message,
-                      metadata: @autoclosure () -> Logger.Metadata? = nil,
-                      file: String = #file, function: String = #function, line: UInt = #line) {
-        instance.core.critical(message(), metadata: metadata(), file: file, function: function, line: line)
-    }
-    
-    
     /// Log a message passing with the `Logger.Level.critical` log level using the client logger.
     ///
     /// If `.critical` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
@@ -334,5 +291,27 @@ public class Log {
                       metadata: @autoclosure () -> Logger.Metadata? = nil,
                       file: String = #file, function: String = #function, line: UInt = #line) {
         instance.client.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+    
+    @inlinable
+    internal static func coreAssert(_ condition: @autoclosure () -> Bool,
+                      _ message: @autoclosure () -> Logger.Message,
+                      metadata: @autoclosure () -> Logger.Metadata? = nil,
+                      file: String = #file, function: String = #function, line: UInt = #line) {
+        if !condition() {
+            instance.core.error(message(), metadata: metadata(), file: file, function: function, line: line)
+            assertionFailure();
+        }
+    }
+    
+    @inlinable
+    public static func assert(_ condition: @autoclosure () -> Bool,
+                      _ message: @autoclosure () -> Logger.Message,
+                      metadata: @autoclosure () -> Logger.Metadata? = nil,
+                      file: String = #file, function: String = #function, line: UInt = #line) {
+        if !condition() {
+            instance.client.error(message(), metadata: metadata(), file: file, function: function, line: line)
+            assertionFailure();
+        }
     }
 }
