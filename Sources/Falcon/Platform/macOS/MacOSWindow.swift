@@ -32,6 +32,12 @@ class MacOSWindow: Window {
             let success = glfwInit()
             Log.coreAssert(success == 1, "Could not initialize GLFW!")
             
+            glfwSetErrorCallback { error, description in
+                let description = String(cString: description ?? UnsafePointer(UnsafeMutablePointer<Int8>.allocate(capacity: 0)), encoding: .utf8) ?? ""
+                
+                Log.coreError("GLFW Error (\(error)): \(description)")
+            }
+            
             isGLFWInitialized = true
         }
         
@@ -39,6 +45,69 @@ class MacOSWindow: Window {
         glfwMakeContextCurrent(glfwWindow)
         glfwSetWindowUserPointer(glfwWindow, &windowData)
         glfwSwapInterval(1)
+        
+        glfwSetWindowSizeCallback(glfwWindow) { window, width, height in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            data[0].width = width
+            data[0].height = height
+            
+            let event = WindowResizeEvent(width: Int(width), height: Int(height))
+            data[0].eventCallback?(event)
+        }
+        
+        glfwSetWindowCloseCallback(glfwWindow) { window in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            
+            let event = WindowCloseEvent()
+            data[0].eventCallback?(event)
+        }
+        
+        glfwSetKeyCallback(glfwWindow) { window, key, scancode, action, mods in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            
+            switch action {
+            case GLFW_PRESS:
+                let event = KeyPressedEvent(keyCode: Int(key), repeatCount: 0)
+                data[0].eventCallback?(event)
+            case GLFW_RELEASE:
+                let event = KeyReleasedEvent(keyCode: Int(key))
+                data[0].eventCallback?(event)
+            case GLFW_REPEAT:
+                let event = KeyPressedEvent(keyCode: Int(key), repeatCount: 1)
+                data[0].eventCallback?(event)
+            default:
+                break
+            }
+        }
+        
+        glfwSetMouseButtonCallback(glfwWindow) { window, button, action, mods in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            
+            switch action {
+            case GLFW_PRESS:
+                let event = MouseButtonPressedEvent(button: Int(button))
+                data[0].eventCallback?(event)
+            case GLFW_RELEASE:
+                let event = MouseButtonReleasedEvent(button: Int(button))
+                data[0].eventCallback?(event)
+            default:
+                break
+            }
+        }
+        
+        glfwSetScrollCallback(glfwWindow) { window, xOffset, yOffset in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            
+            let event = MouseScrolledEvent(xOffset: xOffset, yOffset: yOffset)
+            data[0].eventCallback?(event)
+        }
+        
+        glfwSetCursorPosCallback(glfwWindow) { window, x, y in
+            let data = glfwGetWindowUserPointer(window).assumingMemoryBound(to: WindowData.self)
+            
+            let event = MouseMovedEvent(x: x, y: y)
+            data[0].eventCallback?(event)
+        }
     }
     
     deinit {
