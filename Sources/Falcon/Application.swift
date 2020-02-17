@@ -9,6 +9,7 @@ import SGLOpenGL
 
 open class Application {
     private let window = createWindow()
+    private let layerStack = LayerStack()
     
     private var running = true
     
@@ -21,7 +22,11 @@ open class Application {
         
         dispatcher.dispatch(callback: self.on(windowCloseEvent:))
         
-        Log.coreInfo("\(event)")
+        for layer in layerStack.reversed() {
+            layer.on(event: event)
+            
+            if event.isHandled { break }
+        }
     }
     
     private func on(windowCloseEvent event: WindowCloseEvent) -> Bool {
@@ -30,10 +35,23 @@ open class Application {
     }
     
     
+    public func push(layer: Layer) {
+        layerStack.push(layer: layer)
+    }
+    
+    public func push(overlay: Layer) {
+        layerStack.push(overlay: overlay)
+    }
+    
+    
     open func run() {
         while running {
             glClearColor(red: 1, green: 0, blue: 1, alpha: 1)
             glClear(GL_COLOR_BUFFER_BIT)
+            
+            for layer in layerStack {
+                layer.onUpdate()
+            }
             
             window.onUpdate()
         }
