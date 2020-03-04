@@ -1,5 +1,0 @@
-module cglm
-{
-    umbrella header "cglm.h"
-    link "cglm"
-}
