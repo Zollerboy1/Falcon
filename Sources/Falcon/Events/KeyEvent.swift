@@ -5,9 +5,7 @@
 //  Created by Josef Zoller on 16.02.20.
 //
 
-public protocol KeyEvent: Event {
-    var keyCode: Int { get }
-}
+public protocol KeyEvent: Event {}
 
 public extension KeyEvent {
     static var category: EventCategory {
@@ -22,10 +20,10 @@ public class KeyPressedEvent: KeyEvent {
         isHandled = true
     }
     
-    public let keyCode: Int
+    public let keyCode: KeyCode
     public let repeatCount: Int
     
-    internal init(keyCode: Int, repeatCount: Int) {
+    internal init(keyCode: KeyCode, repeatCount: Int) {
         self.keyCode = keyCode
         self.repeatCount = repeatCount
     }
@@ -42,14 +40,32 @@ public class KeyReleasedEvent: KeyEvent {
         isHandled = true
     }
     
-    public let keyCode: Int
+    public let keyCode: KeyCode
     
-    internal init(keyCode: Int) {
+    internal init(keyCode: KeyCode) {
         self.keyCode = keyCode
     }
     
     public var description: String {
         return "KeyReleasedEvent: \(keyCode)"
+    }
+}
+
+public class KeyTypedEvent: KeyEvent {
+    public private(set) var isHandled = false
+    
+    public func setHandled() {
+        isHandled = true
+    }
+    
+    public let character: UInt32
+    
+    internal init(character: UInt32) {
+        self.character = character
+    }
+    
+    public var description: String {
+        return "KeyReleasedEvent: \(character)"
     }
 }
 

@@ -300,7 +300,7 @@ public class Log {
                       file: String = #file, function: String = #function, line: UInt = #line) {
         if !condition() {
             instance.core.error(message(), metadata: metadata(), file: file, function: function, line: line)
-            assertionFailure();
+            fatalError();
         }
     }
     
@@ -311,7 +311,23 @@ public class Log {
                       file: String = #file, function: String = #function, line: UInt = #line) {
         if !condition() {
             instance.client.error(message(), metadata: metadata(), file: file, function: function, line: line)
-            assertionFailure();
+            fatalError();
         }
+    }
+    
+    @inlinable
+    internal static func coreFatal(_ message: @autoclosure () -> Logger.Message,
+                      metadata: @autoclosure () -> Logger.Metadata? = nil,
+                      file: String = #file, function: String = #function, line: UInt = #line) -> Never {
+        instance.core.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        fatalError()
+    }
+    
+    @inlinable
+    public static func fatal(_ message: @autoclosure () -> Logger.Message,
+                      metadata: @autoclosure () -> Logger.Metadata? = nil,
+                      file: String = #file, function: String = #function, line: UInt = #line) -> Never {
+        instance.core.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        fatalError()
     }
 }

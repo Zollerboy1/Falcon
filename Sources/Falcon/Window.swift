@@ -22,6 +22,10 @@ public protocol Window {
     
     var width: Int { get }
     var height: Int { get }
+    var xScale: Float { get }
+    var yScale: Float { get }
+    
+    var nativeWindow: OpaquePointer { get }
     
     var isVsyncEnabled: Bool { get set }
     

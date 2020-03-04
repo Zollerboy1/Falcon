@@ -48,3 +48,43 @@ public struct EventDispatcher {
         }
     }
 }
+
+
+public protocol EventDelegate {
+    func on(mouseButtonPressedEvent event: MouseButtonPressedEvent) -> Bool
+    func on(mouseButtonReleasedEvent event: MouseButtonReleasedEvent) -> Bool
+    func on(mouseMovedEvent event: MouseMovedEvent) -> Bool
+    func on(mouseScrolledEvent event: MouseScrolledEvent) -> Bool
+    
+    func on(keyPressedEvent event: KeyPressedEvent) -> Bool
+    func on(keyReleasedEvent event: KeyReleasedEvent) -> Bool
+    func on(keyTypedEvent event: KeyTypedEvent) -> Bool
+    
+    func on(windowResizeEvent event: WindowResizeEvent) -> Bool
+    func on(windowScaleChangeEvent event: WindowScaleChangeEvent) -> Bool
+    func on(windowCloseEvent event: WindowCloseEvent) -> Bool
+    
+    func on(appTickEvent event: AppTickEvent) -> Bool
+    func on(appUpdateEvent event: AppUpdateEvent) -> Bool
+    func on(appRenderEvent event: AppRenderEvent) -> Bool
+}
+
+public extension EventDelegate {
+    func on(event: Event) {
+        let dispatcher = EventDispatcher(event: event)
+        
+        dispatcher.dispatch(callback: on(mouseButtonPressedEvent:))
+        dispatcher.dispatch(callback: on(mouseButtonReleasedEvent:))
+        dispatcher.dispatch(callback: on(mouseMovedEvent:))
+        dispatcher.dispatch(callback: on(mouseScrolledEvent:))
+        dispatcher.dispatch(callback: on(keyPressedEvent:))
+        dispatcher.dispatch(callback: on(keyReleasedEvent:))
+        dispatcher.dispatch(callback: on(keyTypedEvent:))
+        dispatcher.dispatch(callback: on(windowResizeEvent:))
+        dispatcher.dispatch(callback: on(windowScaleChangeEvent:))
+        dispatcher.dispatch(callback: on(windowCloseEvent:))
+        dispatcher.dispatch(callback: on(appTickEvent:))
+        dispatcher.dispatch(callback: on(appUpdateEvent:))
+        dispatcher.dispatch(callback: on(appRenderEvent:))
+    }
+}

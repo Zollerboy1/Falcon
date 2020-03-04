@@ -55,7 +55,7 @@ public class MouseScrolledEvent: MouseEvent {
 
 
 public protocol MouseButtonEvent: MouseEvent {
-    var button: Int { get }
+    var button: MouseButtonCode { get }
 }
 
 public extension MouseButtonEvent {
@@ -71,9 +71,9 @@ public class MouseButtonPressedEvent: MouseButtonEvent {
         isHandled = true
     }
     
-    public let button: Int
+    public let button: MouseButtonCode
     
-    internal init(button: Int) {
+    internal init(button: MouseButtonCode) {
         self.button = button
     }
     
@@ -89,9 +89,9 @@ public class MouseButtonReleasedEvent: MouseButtonEvent {
         isHandled = true
     }
     
-    public let button: Int
+    public let button: MouseButtonCode
     
-    internal init(button: Int) {
+    internal init(button: MouseButtonCode) {
         self.button = button
     }
     

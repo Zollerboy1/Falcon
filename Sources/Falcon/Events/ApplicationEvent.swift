@@ -33,6 +33,26 @@ public class WindowResizeEvent: ApplicationEvent {
     }
 }
 
+public class WindowScaleChangeEvent: ApplicationEvent {
+    public private(set) var isHandled = false
+    
+    public func setHandled() {
+        isHandled = true
+    }
+    
+    public let xScale: Float
+    public let yScale: Float
+    
+    internal init(xScale: Float, yScale: Float) {
+        self.xScale = xScale
+        self.yScale = yScale
+    }
+    
+    public var description: String {
+        return "WindowScaleChangeEvent: \(xScale), \(yScale)"
+    }
+}
+
 public class WindowCloseEvent: ApplicationEvent {
     public private(set) var isHandled = false
     

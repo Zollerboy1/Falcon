@@ -40,22 +40,30 @@ public extension LayerStack {
     func push(layer: Layer) {
         layers.insert(layer, at: layerInsert)
         layerInsert = index(after: layerInsert)
+        
+        layer.onAttach()
     }
     
     func push(overlay: Layer) {
         layers.append(overlay)
+        
+        overlay.onAttach()
     }
     
     func pop(layer: Layer) {
         if let i = firstIndex(where: { $0 === layer }) {
             layers.remove(at: i)
             layerInsert = index(before: layerInsert)
+
+            layer.onDetach()
         }
     }
     
     func pop(overlay: Layer) {
         if let i = firstIndex(where: { $0 === overlay }) {
             layers.remove(at: i)
+            
+            overlay.onDetach()
         }
     }
 }
