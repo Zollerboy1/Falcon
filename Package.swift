@@ -28,6 +28,12 @@ let package = Package(
             name: "glad",
             dependencies: []),
         .target(
+            name: "cglm",
+            dependencies: []),
+        .target(
+            name: "SwiftGLM",
+            dependencies: ["cglm"]),
+        .target(
             name: "CppImGuiOpenGLImpl",
             dependencies: ["glad", "CImGui"]),
         .target(
@@ -35,7 +41,7 @@ let package = Package(
             dependencies: ["CppImGuiOpenGLImpl"]),
         .target(
             name: "Falcon",
-            dependencies: ["HeliumLogger", "GLFW", "glad", "ImGui", "CImGuiOpenGLImpl"]),
+            dependencies: ["HeliumLogger", "GLFW", "glad", "ImGui", "CImGuiOpenGLImpl", "SwiftGLM"]),
         .testTarget(
             name: "FalconTests",
             dependencies: ["Falcon"]),
