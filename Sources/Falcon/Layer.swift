@@ -18,6 +18,8 @@ open class Layer: CustomStringConvertible, EventDelegate {
     open func onDetach() {}
     open func onUpdate() {}
     
+    open func onImGuiRender() {}
+    
     //Default implementations
     open func on(mouseButtonPressedEvent event: MouseButtonPressedEvent) -> Bool {
         return false

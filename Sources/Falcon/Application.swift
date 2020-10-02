@@ -12,14 +12,19 @@ open class Application: EventDelegate {
     
     public let window = createWindow()
     
+    private let imGuiLayer: ImGuiLayer
     private let layerStack = LayerStack()
     private var running = true
     
     public required init() {
-        window.setEventCallback(self.on(event:))
+        self.imGuiLayer = ImGuiLayer(demo: true)
         
         Log.assert(Application.instance == nil, "Application already exists!")
         Application.instance = self
+        
+        push(overlay: self.imGuiLayer)
+        
+        window.setEventCallback(self.on(event:))
     }
     
     public func on(event: Event) {
@@ -49,6 +54,16 @@ open class Application: EventDelegate {
         for layer in layerStack {
             layer.onUpdate()
         }
+        
+        imGuiLayer.begin()
+        
+        imGuiLayer.render()
+        
+        for layer in layerStack {
+            layer.onImGuiRender()
+        }
+        
+        imGuiLayer.end()
     }
     
     

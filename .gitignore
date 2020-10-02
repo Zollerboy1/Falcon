@@ -5,3 +5,5 @@ Package.resolved
 /.swiftpm
 /*.xcodeproj
 xcuserdata/
+
+imgui.ini

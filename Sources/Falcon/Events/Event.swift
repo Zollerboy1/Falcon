@@ -12,7 +12,7 @@ public struct EventCategory: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let none         = EventCategory(rawValue: 0)
+    public static let none         = EventCategory([])
     public static let application  = EventCategory(rawValue: 1 << 0)
     public static let input        = EventCategory(rawValue: 1 << 1)
     public static let keyboard     = EventCategory(rawValue: 1 << 2)

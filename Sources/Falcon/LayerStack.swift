@@ -21,7 +21,7 @@ public class LayerStack: Collection {
     public var startIndex: Index { return layers.startIndex }
     public var endIndex: Index { return layers.endIndex }
     
-    public subscript(index: Index) -> Iterator.Element {
+    public subscript(index: Index) -> Element {
         get { return layers[index] }
     }
     
