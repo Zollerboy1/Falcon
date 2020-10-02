@@ -50,7 +50,7 @@ class MacOSWindow: Window {
         
         self.glfwWindow = glfwCreateWindow(Int32(props.width), Int32(props.height), props.title, nil, nil)
         glfwMakeContextCurrent(glfwWindow)
-        
+
         let status = gladLoadGLLoader { procname in
             unsafeBitCast(glfwGetProcAddress(procname), to: UnsafeMutableRawPointer.self)
         }
@@ -59,8 +59,6 @@ class MacOSWindow: Window {
         
         var xScale: Float = 0, yScale: Float = 0
         glfwGetWindowContentScale(glfwWindow, &xScale, &yScale)
-        
-        Log.coreTrace("Window scale: \(xScale), \(yScale)")
         
         self.windowData = WindowData(title: props.title, width: props.width, height: props.height, xScale: xScale, yScale: yScale, vSync: true, eventCallback: nil)
         

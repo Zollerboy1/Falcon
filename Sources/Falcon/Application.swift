@@ -74,6 +74,15 @@ open class Application: EventDelegate {
             window.onUpdate()
         }
     }
+
+    /// The @main attribute doesn't work with the swift package manager,
+    /// so currently this method is useless
+    public static func main() {
+        Log.coreInfo("\(Falcon.welcomeMessage)")
+
+        let application = Self.init()
+        application.run()
+    }
     
     
     open func on(mouseButtonPressedEvent event: MouseButtonPressedEvent) -> Bool {
