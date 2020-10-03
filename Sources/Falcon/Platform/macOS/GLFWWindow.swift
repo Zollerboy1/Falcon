@@ -1,5 +1,5 @@
 //
-//  MacOSWindow.swift
+//  GLFWWindow.swift
 //  Falcon
 //
 //  Created by Josef Zoller on 17.02.20.
@@ -9,13 +9,10 @@
 
 import Foundation
 import GLFW
-import func glad.gladLoadGLLoader
-import let glad.GL_TRUE
 
 fileprivate var isGLFWInitialized = false
 
-class MacOSWindow: Window {
-    
+class GLFWWindow: Window {
     struct WindowData {
         var title: String
         var width, height: Int
@@ -23,8 +20,10 @@ class MacOSWindow: Window {
         var vSync: Bool
         var eventCallback: ((Event) -> ())?
     }
-    
-    var glfwWindow: OpaquePointer
+
+    let glfwWindow: OpaquePointer
+    let graphicsContext: GraphicsContext
+
     var windowData: WindowData
     
     required init(withProperties props: WindowProperties) {
@@ -46,16 +45,19 @@ class MacOSWindow: Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1)
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1)
         
         self.glfwWindow = glfwCreateWindow(Int32(props.width), Int32(props.height), props.title, nil, nil)
-        glfwMakeContextCurrent(glfwWindow)
 
-        let status = gladLoadGLLoader { procname in
-            unsafeBitCast(glfwGetProcAddress(procname), to: UnsafeMutableRawPointer.self)
+        switch Renderer.currentAPI {
+        #if canImport(glad)
+        case .openGL:
+            self.graphicsContext = OpenGLContext(windowHandle: glfwWindow)
+        #endif
+
+        case .none:
+            Log.coreFatal("Have no renderer API!")
         }
-        Log.coreAssert(status == 1, "Could not initialize Glad!")
-        
         
         var xScale: Float = 0, yScale: Float = 0
         glfwGetWindowContentScale(glfwWindow, &xScale, &yScale)
@@ -64,7 +66,8 @@ class MacOSWindow: Window {
         
         
         glfwSetWindowUserPointer(glfwWindow, &windowData)
-        glfwSwapInterval(1)
+
+        self.isVsyncEnabled = true
         
         
         glfwSetWindowSizeCallback(glfwWindow) { window, width, height in
@@ -179,15 +182,13 @@ class MacOSWindow: Window {
     
     func onUpdate() {
         glfwPollEvents()
-        
-        glfwSwapBuffers(glfwWindow)
+
+        self.graphicsContext.swapBuffers()
     }
     
     func setEventCallback(_ callback: @escaping (Event) -> ()) {
         windowData.eventCallback = callback
     }
-    
-    
 }
 
 #endif

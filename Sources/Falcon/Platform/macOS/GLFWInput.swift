@@ -1,5 +1,5 @@
 //
-//  MacOSInput.swift
+//  GLFWInput.swift
 //  Falcon
 //
 //  Created by Josef Zoller on 02.03.20.
@@ -9,7 +9,7 @@
 
 import GLFW
 
-class MacOSInput: Input {
+class GLFWInput: Input {
     override func isKeyPressed(withKeyCode keyCode: KeyCode) -> Bool {
         let window = Application.instance!.window
         

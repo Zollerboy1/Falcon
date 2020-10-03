@@ -6,9 +6,9 @@
 //
 
 public class Input {
-    private static let instance: Input = {
+    private static let main: Input = {
         #if os(macOS)
-            return MacOSInput()
+            return GLFWInput()
         #endif
     }()
     
@@ -19,14 +19,14 @@ public class Input {
     internal func getMousePosition() -> (x: Double, y: Double) { return (0, 0) }
     
     public static func isKeyPressed(withKeyCode keyCode: KeyCode) -> Bool {
-        instance.isKeyPressed(withKeyCode: keyCode)
+        main.isKeyPressed(withKeyCode: keyCode)
     }
     
     public static func isMouseButtonPressed(withButtonCode button: MouseButtonCode) -> Bool {
-        instance.isMouseButtonPressed(withButtonCode: button)
+        main.isMouseButtonPressed(withButtonCode: button)
     }
     
-    public static var mousePosition: (x: Double, y: Double) { instance.getMousePosition() }
+    public static var mousePosition: (x: Double, y: Double) { main.getMousePosition() }
     
     public static var mouseX: Double { mousePosition.x }
     public static var mouseY: Double { mousePosition.y }

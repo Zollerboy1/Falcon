@@ -26,6 +26,7 @@ public protocol Window {
     var yScale: Float { get }
     
     var nativeWindow: OpaquePointer { get }
+    var graphicsContext: GraphicsContext { get }
     
     var isVsyncEnabled: Bool { get set }
     
@@ -34,10 +35,13 @@ public protocol Window {
     func setEventCallback(_ callback: @escaping (Event) -> ())
 }
 
-public func createWindow(withProperties properties: WindowProperties = WindowProperties()) -> Window {
-    #if os(macOS)
-        return MacOSWindow(withProperties: properties)
-    #endif
+
+public enum WindowFactory {
+    public static func create(withProperties properties: WindowProperties = WindowProperties()) -> Window {
+        #if os(macOS)
+            return GLFWWindow(withProperties: properties)
+        #endif
+    }
 }
 
 
