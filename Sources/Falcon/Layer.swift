@@ -16,7 +16,7 @@ open class Layer: CustomStringConvertible, EventDelegate {
     
     open func onAttach() {}
     open func onDetach() {}
-    open func onUpdate() {}
+    open func onUpdate(deltaTime timestep: Timestep) {}
     
     open func onImGuiRender() {}
     

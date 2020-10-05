@@ -6,6 +6,7 @@
 //
 
 import SGLMath
+import GLFW
 
 open class Application: EventDelegate {
     public private(set) static var instance: Application?
@@ -15,16 +16,18 @@ open class Application: EventDelegate {
     private let imGuiLayer: ImGuiLayer
     private let layerStack = LayerStack()
     private var running = true
+
+    private var lastFrameTime = 0.0
     
     public required init() {
-        self.imGuiLayer = ImGuiLayer(demo: false)
+        imGuiLayer = ImGuiLayer(demo: false)
         
         Log.assert(Application.instance == nil, "Application already exists!")
         Application.instance = self
         
-        push(overlay: self.imGuiLayer)
+        push(overlay: imGuiLayer)
         
-        window.setEventCallback(self.on(event:))
+        window.setEventCallback(on(event:))
     }
     
     public func on(event: Event) {
@@ -45,11 +48,23 @@ open class Application: EventDelegate {
     public func push(overlay: Layer) {
         layerStack.push(overlay: overlay)
     }
+
+
+    private func deltaTime() -> Timestep {
+        let time = glfwGetTime()
+        let timestep = Timestep(time: time - lastFrameTime)
+
+        lastFrameTime = time
+
+        return timestep
+    }
     
     
     internal func update() {
+        let timestep = deltaTime()
+
         for layer in layerStack {
-            layer.onUpdate()
+            layer.onUpdate(deltaTime: timestep)
         }
         
         imGuiLayer.begin()

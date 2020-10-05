@@ -14,8 +14,8 @@ class ExampleLayer: Layer {
 
     private let camera = OrthographicCamera(box: .init(left: -1.6, right: 1.6, bottom: -0.9, top: 0.9))
 
-    private static let cameraMoveSpeed: Float = 0.025
-    private static let cameraRotationSpeed: Float = 0.5
+    private static let cameraMoveSpeed: Float = 1
+    private static let cameraRotationSpeed: Float = 45
 
     private var vertexArray: VertexArray!
     private var shader: Shader!
@@ -125,28 +125,28 @@ class ExampleLayer: Layer {
         self.blueShader = Shader(vertexSource: blueVertexShaderSource, fragmentSource: blueFragmentShaderSource)
     }
 
-    override func onUpdate() {
-        super.onUpdate()
+    override func onUpdate(deltaTime timestep: Timestep) {
+        super.onUpdate(deltaTime: timestep)
 
         RenderCommand.set(clearColor: vec4(r: 0.1, g: 0.1, b: 0.1, a: 1))
         RenderCommand.clear()
 
         if Input.isKeyPressed(withKeyCode: .a) {
-            self.camera.position.x -= ExampleLayer.cameraMoveSpeed
+            self.camera.position.x -= ExampleLayer.cameraMoveSpeed * timestep
         } else if Input.isKeyPressed(withKeyCode: .d) {
-            self.camera.position.x += ExampleLayer.cameraMoveSpeed
+            self.camera.position.x += ExampleLayer.cameraMoveSpeed * timestep
         }
 
         if Input.isKeyPressed(withKeyCode: .s) {
-            self.camera.position.y -= ExampleLayer.cameraMoveSpeed
+            self.camera.position.y -= ExampleLayer.cameraMoveSpeed * timestep
         } else if Input.isKeyPressed(withKeyCode: .w) {
-            self.camera.position.y += ExampleLayer.cameraMoveSpeed
+            self.camera.position.y += ExampleLayer.cameraMoveSpeed * timestep
         }
 
         if Input.isKeyPressed(withKeyCode: .left) {
-            self.camera.rotation += ExampleLayer.cameraRotationSpeed
+            self.camera.rotation += ExampleLayer.cameraRotationSpeed * timestep
         } else if Input.isKeyPressed(withKeyCode: .right) {
-            self.camera.rotation -= ExampleLayer.cameraRotationSpeed
+            self.camera.rotation -= ExampleLayer.cameraRotationSpeed * timestep
         }
 
         Renderer.scene(withCamera: self.camera) {
