@@ -32,14 +32,14 @@ public enum ShaderType {
     }
 
     var componentCount: Int {
-        switch Renderer.currentAPI {
+        switch Renderer.UnderlyingAPI.current {
         #if canImport(glad)
         case .openGL:
             return openGLComponentCount
         #endif
 
         case .none:
-            Log.coreFatal("Have no renderer API!")
+            Log.coreFatal("Have no graphics API!")
         }
     }
 }

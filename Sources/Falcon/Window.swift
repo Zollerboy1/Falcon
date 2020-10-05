@@ -17,7 +17,7 @@ public struct WindowProperties {
     }
 }
 
-public protocol Window {
+public protocol Window: AnyObject {
     init(withProperties properties: WindowProperties)
     
     var width: Int { get }

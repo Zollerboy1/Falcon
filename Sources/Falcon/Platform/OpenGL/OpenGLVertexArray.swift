@@ -36,14 +36,14 @@ class OpenGLVertexArray: VertexArray {
         glad_glDeleteVertexArrays(1, &id)
     }
 
-    func withBound<R>(_ body: () -> R) -> R {
+    func withBound<R>(_ body: () throws -> R) rethrows -> R {
         glad_glBindVertexArray(id)
 
-        let returnValue = body()
+        let result = try body()
 
         glad_glBindVertexArray(0)
 
-        return returnValue
+        return result
     }
 
     func bindOnce() {

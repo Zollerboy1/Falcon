@@ -49,14 +49,14 @@ class GLFWWindow: Window {
         
         self.glfwWindow = glfwCreateWindow(Int32(props.width), Int32(props.height), props.title, nil, nil)
 
-        switch Renderer.currentAPI {
+        switch Renderer.UnderlyingAPI.current {
         #if canImport(glad)
         case .openGL:
             self.graphicsContext = OpenGLContext(windowHandle: glfwWindow)
         #endif
 
         case .none:
-            Log.coreFatal("Have no renderer API!")
+            Log.coreFatal("Have no graphics API!")
         }
         
         var xScale: Float = 0, yScale: Float = 0

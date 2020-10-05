@@ -9,7 +9,7 @@ public protocol VertexArray: AnyObject {
     var vertexBuffers: [VertexBuffer] { get }
     var indexBuffer: IndexBuffer? { get set }
 
-    func withBound<R>(_ body: () -> R) -> R
+    func withBound<R>(_ body: () throws -> R) rethrows -> R
     func bindOnce()
 
     func add(vertexBuffer: VertexBuffer)

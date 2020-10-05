@@ -5,6 +5,7 @@
 //  Created by Josef Zoller on 03.10.20.
 //
 
+import SGLMath
 import glad
 
 public class Shader {
@@ -114,5 +115,15 @@ public class Shader {
 
     public func unbind() {
         glad_glUseProgram(0)
+    }
+
+    public func uploadUniform(matrix: mat4, withName name: String) {
+        let location = name.withCString { stringPointer in
+            glad_glGetUniformLocation(id, stringPointer)
+        }
+
+        matrix.withUnsafePointer {
+            glad_glUniformMatrix4fv(location, 1, GLboolean(GL_FALSE), $0)
+        }
     }
 }
